@@ -43,6 +43,20 @@ export function TraceQLSearchSettings({ options, onOptionsChange }: Props) {
           <TraceQLSearchTags datasource={datasource} options={options} onOptionsChange={onOptionsChange} />
         </InlineField>
       </InlineFieldRow>
+      <InlineFieldRow className={styles.row}>
+        <InlineField tooltip="Set default values for trace and span limits " label="Trace and Span Limits" labelWidth={26}>
+          <InlineSwitch
+            id="spanLimit"
+            value={options.jsonData.search?.spss}
+            onChange={(event: React.SyntheticEvent<HTMLInputElement>) =>
+              updateDatasourcePluginJsonDataOption({ onOptionsChange, options }, 'search', {
+                ...options.jsonData.search,
+                spss: event.currentTarget.checked,
+              })
+            }
+          />
+        </InlineField>
+      </InlineFieldRow>
     </div>
   );
 }
