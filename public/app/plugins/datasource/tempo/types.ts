@@ -16,6 +16,8 @@ export interface TempoJsonData extends DataSourceJsonData {
   spanBar?: {
     tag: string;
   };
+  spss?: string; // spans per span set
+  traceLimit?: string;
   tagLimit?: number;
   traceQuery?: {
     timeShiftEnabled?: boolean;

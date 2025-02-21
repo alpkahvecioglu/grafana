@@ -3,7 +3,7 @@ import useAsync from 'react-use/lib/useAsync';
 
 import { DataSourcePluginOptionsEditorProps, updateDatasourcePluginJsonDataOption } from '@grafana/data';
 import { getDataSourceSrv } from '@grafana/runtime';
-import { InlineField, InlineFieldRow, InlineSwitch, useStyles2 } from '@grafana/ui';
+import { Input, InlineField, InlineFieldRow, InlineSwitch, useStyles2 } from '@grafana/ui';
 
 import { TempoDatasource } from '../datasource';
 import { TempoJsonData } from '../types';
@@ -45,15 +45,33 @@ export function TraceQLSearchSettings({ options, onOptionsChange }: Props) {
       </InlineFieldRow>
       <InlineFieldRow className={styles.row}>
         <InlineField tooltip="Set default values for trace and span limits " label="Trace and Span Limits" labelWidth={26}>
-          <InlineSwitch
-            id="spanLimit"
-            value={options.jsonData.search?.spss}
-            onChange={(event: React.SyntheticEvent<HTMLInputElement>) =>
-              updateDatasourcePluginJsonDataOption({ onOptionsChange, options }, 'search', {
-                ...options.jsonData.search,
-                spss: event.currentTarget.checked,
-              })
-            }
+          <Input
+            type="number"
+            id="spss"
+            value={spss}
+            onChange={(val) => {
+              updateDatasourcePluginJsonDataOption({ onOptionsChange, options }, 'spss', {
+                ...options.jsonData.spss,
+                spss: val,
+              });
+            }}
+            width={16}
+            placeholder="3"
+            spellCheck={false}
+          />
+          <Input
+            type="number"
+            id="traceLimit"
+            value={traceLimit}
+            onChange={(val) => {
+              updateDatasourcePluginJsonDataOption({ onOptionsChange, options }, 'traceLimit', {
+                ...options.jsonData.traceLimit,
+                traceLimit: val,
+              });
+            }}
+            width={16}
+            placeholder="20"
+            spellCheck={false}
           />
         </InlineField>
       </InlineFieldRow>

@@ -107,6 +107,8 @@ export class TempoDatasource extends DataSourceWithBackend<TempoQuery, TempoJson
     filters?: TraceqlFilter[];
   };
   nodeGraph?: NodeGraphOptions;
+  spss?: string; // spans per span set
+  traceLimit?: string;
   traceQuery?: {
     timeShiftEnabled?: boolean;
     spanStartTimeShift?: string;
@@ -137,6 +139,8 @@ export class TempoDatasource extends DataSourceWithBackend<TempoQuery, TempoJson
     this.nodeGraph = instanceSettings.jsonData.nodeGraph;
     this.traceQuery = instanceSettings.jsonData.traceQuery;
     this.streamingEnabled = instanceSettings.jsonData.streamingEnabled;
+    this.spss = parseInt(instanceSettings.jsonData.spss ?? '0', 10) || DEFAULT_SPSS;
+    this.traceLimit = parseInt(instanceSettings.jsonData.traceLimit ?? '0', 10) || DEFAULT_LIMIT;
 
     this.languageProvider = new TempoLanguageProvider(this);
 
@@ -427,8 +431,8 @@ export class TempoDatasource extends DataSourceWithBackend<TempoQuery, TempoJson
             subQueries.push(
               this._request('/api/search', {
                 q: queryFromFilters,
-                limit: options.targets[0].limit ?? DEFAULT_LIMIT,
-                spss: options.targets[0].spss ?? DEFAULT_SPSS,
+                limit: options.targets[0].limit ?? this.traceLimit,
+                spss: options.targets[0].spss ?? this.spss,
                 start: options.range.from.unix(),
                 end: options.range.to.unix(),
               }).pipe(
@@ -600,8 +604,8 @@ export class TempoDatasource extends DataSourceWithBackend<TempoQuery, TempoJson
     } else {
       return this._request('/api/search', {
         q: queryValue,
-        limit: options.targets[0].limit ?? DEFAULT_LIMIT,
-        spss: options.targets[0].spss ?? DEFAULT_SPSS,
+        limit: options.targets[0].limit ?? this.traceLimit,
+        spss: options.targets[0].spss ?? this.spss,
         start: options.range.from.unix(),
         end: options.range.to.unix(),
       }).pipe(
